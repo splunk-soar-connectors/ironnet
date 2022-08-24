@@ -106,7 +106,7 @@ class IronnetConnector(BaseConnector):
         message = "Status Code: {0}. Data from server:\n{1}\n".format(status_code,
                                                                       error_text)
 
-        message = message.replace(u'{', '{{').replace(u'}', '}}')
+        message = message.replace('{', '{{').replace('}', '}}')
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -126,7 +126,7 @@ class IronnetConnector(BaseConnector):
 
         # You should process the error returned in the json
         message = "Error from server. Status Code: {0} Data from server: {1}".format(
-            r.status_code, r.text.replace(u'{', '{{').replace(u'}', '}}'))
+            r.status_code, r.text.replace('{', '{{').replace('}', '}}'))
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -173,9 +173,9 @@ class IronnetConnector(BaseConnector):
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Invalid method: {0}".format(method)), None)
 
         # Create a URL to connect to
-        url = UnicodeDammit(self._base_url).unicode_markup.encode('utf-8') + endpoint
+        url = UnicodeDammit(self._base_url).unicode_markup.encode('utf-8') + endpoint.encode('utf-8')
 
-        self.save_progress("Issuing {} request on {} w/ content: {}".format(method, url, data))
+        self.save_progress("Issuing {} request on {} w/ auth {}:{} content: {}".format(method, url, self._username, self._password, data))
         try:
             r = request_func(
                 url,
@@ -185,7 +185,7 @@ class IronnetConnector(BaseConnector):
                 **kwargs)
         except Exception as e:
             if e.message:
-                if isinstance(e.message, basestring):
+                if isinstance(e.message, str):
                     error_msg = UnicodeDammit(e.message).unicode_markup.encode('UTF-8')
                 else:
                     try:
