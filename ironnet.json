@@ -10,7 +10,7 @@
     "product_version_regex": ".*",
     "publisher": "IronNet",
     "license": "Copyright (c) IronNet, 2020",
-    "app_version": "1.0.3",
+    "app_version": "1.1.0",
     "utctime_updated": "2022-01-07T22:30:54.000000Z",
     "package_name": "phantom_ironnet",
     "main_module": "ironnet_connector.pyc",
