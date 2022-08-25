@@ -6,7 +6,7 @@ Connector Version: 1\.1\.0
 Product Vendor: IronNet  
 Product Name: IronDefense  
 Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 4\.6\.19142  
+Minimum Product Version: 5\.3\.3\.92213  
 
 This app provides generic actions for interacting with IronDefense
 
