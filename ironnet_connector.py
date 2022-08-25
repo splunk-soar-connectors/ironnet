@@ -13,7 +13,12 @@ import re
 from bs4 import BeautifulSoup
 from bs4 import UnicodeDammit
 
-severity_mapping = {'undecided': 'SEVERITY_UNDECIDED', 'benign': 'SEVERITY_BENIGN', 'suspicious': 'SEVERITY_SUSPICIOUS', 'malicious': 'SEVERITY_MALICIOUS'}
+severity_mapping = {
+    'undecided': 'SEVERITY_UNDECIDED',
+    'benign': 'SEVERITY_BENIGN',
+    'suspicious': 'SEVERITY_SUSPICIOUS',
+    'malicious': 'SEVERITY_MALICIOUS'
+}
 
 expectation_mapping = {'expected': 'EXP_EXPECTED', 'unexpected': 'EXP_UNEXPECTED', 'unknown': 'EXP_UNKNOWN'}
 
@@ -263,7 +268,11 @@ class IronnetConnector(BaseConnector):
         self.save_progress(f'Received param: {param}')
 
         # Access action parameters passed in the 'param' dictionary
-        request = {'alert_id': param.get('alert_id'), 'comment': param.get('comment'), 'share_comment_with_irondome': param.get('share_comment_with_irondome')}
+        request = {
+            'alert_id': param.get('alert_id'),
+            'comment': param.get('comment'),
+            'share_comment_with_irondome': param.get('share_comment_with_irondome')
+        }
 
         # make rest call
         ret_val, response = self._make_post('/CommentOnAlert', action_result, data=request, headers=None)
@@ -309,7 +318,8 @@ class IronnetConnector(BaseConnector):
             return action_result.set_status(phantom.APP_SUCCESS, 'Reporting bad activity to IronDefense was successful')
         else:
             self.debug_print(f'Reporting bad activity to IronDefense failed. Error: {action_result.get_message()}')
-            return action_result.set_status(phantom.APP_ERROR, f'Reporting bad activity to IronDefense failed. Error: {action_result.get_message()}')
+            return action_result.set_status(phantom.APP_ERROR,
+                                            f'Reporting bad activity to IronDefense failed. Error: {action_result.get_message()}')
 
     def _handle_irondefense_get_alert_irondome_info(self, param):
         self.save_progress(f'In action handler for: {self.get_action_identifier()}')
@@ -659,7 +669,9 @@ class IronnetConnector(BaseConnector):
         if self._enable_alert_notifications:
             alert_acts = config.get('alert_notification_actions')
             if alert_acts:
-                self._alert_notification_actions = ['ANA_' + str(act).strip().replace(' ', '_').upper() for act in alert_acts.split(',') if act.strip()]
+                self._alert_notification_actions = [
+                    'ANA_' + str(act).strip().replace(' ', '_').upper() for act in alert_acts.split(',') if act.strip()
+                ]
             else:
                 self._alert_notification_actions = ['ANA_ALERT_CREATED']
             alert_cats = config.get('alert_categories')
@@ -669,13 +681,17 @@ class IronnetConnector(BaseConnector):
                 self._alert_categories = []
             alert_subcats = config.get('alert_subcategories')
             if alert_subcats:
-                self._alert_subcategories = [str(subcat).strip().replace(' ', '_').upper() for subcat in alert_subcats.split(',') if subcat.strip()]
+                self._alert_subcategories = [
+                    str(subcat).strip().replace(' ', '_').upper() for subcat in alert_subcats.split(',') if subcat.strip()
+                ]
             else:
                 self._alert_subcategories = []
             self._alert_severity_lower = int(config.get('alert_severity_lower'))
             self._alert_severity_upper = int(config.get('alert_severity_upper'))
             if self._alert_severity_lower >= self._alert_severity_upper:
-                self.save_progress(f'Initialization Failed: Invalid Range for Alert Severity- {self._alert_severity_lower} is not lower than {self._alert_severity_upper}')
+                self.save_progress(
+                    f'Initialization Failed: Invalid Range for Alert Severity- {self._alert_severity_lower} is not lower than {self._alert_severity_upper}'
+                )
                 return phantom.APP_ERROR
             self._alert_limit = int(config.get('alert_limit'))
 
@@ -694,7 +710,9 @@ class IronnetConnector(BaseConnector):
         if self._enable_event_notifications:
             event_acts = config.get('event_notification_actions')
             if event_acts:
-                self._event_notification_actions = ['ENA_' + str(act).strip().replace(' ', '_').upper() for act in event_acts.split(',') if act.strip()]
+                self._event_notification_actions = [
+                    'ENA_' + str(act).strip().replace(' ', '_').upper() for act in event_acts.split(',') if act.strip()
+                ]
             else:
                 self._event_notification_actions = ['ENA_EVENT_CREATED']
             event_cats = config.get('event_categories')
@@ -704,13 +722,17 @@ class IronnetConnector(BaseConnector):
                 self._event_categories = []
             event_subcats = config.get('event_subcategories')
             if event_subcats:
-                self._event_subcategories = [str(subcat).strip().replace(' ', '_').upper() for subcat in event_subcats.split(',') if subcat.strip()]
+                self._event_subcategories = [
+                    str(subcat).strip().replace(' ', '_').upper() for subcat in event_subcats.split(',') if subcat.strip()
+                ]
             else:
                 self._event_subcategories = []
             self._event_severity_lower = int(config.get('event_severity_lower'))
             self._event_severity_upper = int(config.get('event_severity_upper'))
             if self._event_severity_lower >= self._event_severity_upper:
-                self.save_progress(f'Initialization Failed: Invalid Range for Event Severity- {self._event_severity_lower} is not lower than {self._event_severity_upper}')
+                self.save_progress(
+                    f'Initialization Failed: Invalid Range for Event Severity- {self._event_severity_lower} is not lower than {self._event_severity_upper}'
+                )
                 return phantom.APP_ERROR
             self._event_limit = int(config.get('event_limit'))
             self._store_event_notifs_in_alert_containers = config.get('store_event_notifs_in_alert_containers')
