@@ -145,7 +145,8 @@ class IronnetConnector(BaseConnector):
             return self._process_empty_response(r, action_result)
 
         # everything else is actually an error at this point
-        message = f'Can\'t process response from server. Status Code: {r.status_code} Data from server: {r.text.replace("{", "{{").replace("}", "}}")}'
+        message = f'Can\'t process response from server. Status Code: {r.status_code} ' +\
+                  f'Data from server: {r.text.replace("{", "{{").replace("}", "}}")}'
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -690,7 +691,8 @@ class IronnetConnector(BaseConnector):
             self._alert_severity_upper = int(config.get('alert_severity_upper'))
             if self._alert_severity_lower >= self._alert_severity_upper:
                 self.save_progress(
-                    f'Initialization Failed: Invalid Range for Alert Severity- {self._alert_severity_lower} is not lower than {self._alert_severity_upper}'
+                    f'Initialization Failed: Invalid Range for Alert Severity- {self._alert_severity_lower} ' + \
+                    f'is not lower than {self._alert_severity_upper}'
                 )
                 return phantom.APP_ERROR
             self._alert_limit = int(config.get('alert_limit'))
@@ -731,7 +733,8 @@ class IronnetConnector(BaseConnector):
             self._event_severity_upper = int(config.get('event_severity_upper'))
             if self._event_severity_lower >= self._event_severity_upper:
                 self.save_progress(
-                    f'Initialization Failed: Invalid Range for Event Severity- {self._event_severity_lower} is not lower than {self._event_severity_upper}'
+                    f'Initialization Failed: Invalid Range for Event Severity- {self._event_severity_lower} ' + \
+                    f'is not lower than {self._event_severity_upper}'
                 )
                 return phantom.APP_ERROR
             self._event_limit = int(config.get('event_limit'))
