@@ -2,16 +2,14 @@
 # IronNet Phantom Connector
 # -----------------------------------------
 
-# Phantom App imports
-import phantom.app as phantom
-from phantom.base_connector import BaseConnector
-from phantom.action_result import ActionResult
-
-import requests
 import json
 import re
-from bs4 import BeautifulSoup
-from bs4 import UnicodeDammit
+
+import phantom.app as phantom
+import requests
+from bs4 import BeautifulSoup, UnicodeDammit
+from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
 
 severity_mapping = {
     'undecided': 'SEVERITY_UNDECIDED',
@@ -691,7 +689,7 @@ class IronnetConnector(BaseConnector):
             self._alert_severity_upper = int(config.get('alert_severity_upper'))
             if self._alert_severity_lower >= self._alert_severity_upper:
                 self.save_progress(
-                    f'Initialization Failed: Invalid Range for Alert Severity- {self._alert_severity_lower} ' + \
+                    f'Initialization Failed: Invalid Range for Alert Severity- {self._alert_severity_lower} ' +
                     f'is not lower than {self._alert_severity_upper}'
                 )
                 return phantom.APP_ERROR
@@ -733,7 +731,7 @@ class IronnetConnector(BaseConnector):
             self._event_severity_upper = int(config.get('event_severity_upper'))
             if self._event_severity_lower >= self._event_severity_upper:
                 self.save_progress(
-                    f'Initialization Failed: Invalid Range for Event Severity- {self._event_severity_lower} ' + \
+                    f'Initialization Failed: Invalid Range for Event Severity- {self._event_severity_lower} ' +
                     f'is not lower than {self._event_severity_upper}'
                 )
                 return phantom.APP_ERROR
