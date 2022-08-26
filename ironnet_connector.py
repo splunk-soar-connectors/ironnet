@@ -544,8 +544,8 @@ class IronnetConnector(BaseConnector):
             request['sub_category'] = [str(cat).strip().replace(' ', '_').upper() for cat in param['sub_category'].split(',')]
         if 'status' in param and param['status'].strip() != '':
             request['status'] = [status_mapping[status.strip().lower()] for status in param['status'].split(',')]
-        min_sev = 0 if 'min_severity' not in param else param['min_severity']
-        max_sev = 1000 if 'max_severity' not in param else param['max_severity']
+        min_sev = param.get('min_severity', 0)
+        max_sev = param.get('max_severity', 1000)
         request['severity'] = {'lower_bound': min_sev, 'upper_bound': max_sev}
 
         # make rest call
@@ -603,6 +603,26 @@ class IronnetConnector(BaseConnector):
             self.debug_print(f'Retrieving event failed. Error: {action_result.get_message()}')
             return action_result.set_status(phantom.APP_ERROR, f'Retrieving event failed. Error: {action_result.get_message()}')
 
+    def _handle_on_poll(self, param):
+        alert_ret_val = phantom.APP_SUCCESS
+        dome_ret_val = phantom.APP_SUCCESS
+        event_ret_val = phantom.APP_SUCCESS
+
+        if self._enable_alert_notifications:
+            alert_ret_val = self._handle_irondefense_get_alert_notifications()
+        else:
+            self.save_progress('Fetching alert notifications is disabled')
+        if self._enable_dome_notifications:
+            dome_ret_val = self._handle_irondefense_get_dome_notifications()
+        else:
+            self.save_progress('Fetching dome notifications is disabled')
+        if self._enable_event_notifications:
+            event_ret_val = self._handle_irondefense_get_event_notifications()
+        else:
+            self.save_progress('Fetching event notifications is disabled')
+
+        return alert_ret_val and dome_ret_val and event_ret_val
+
     def handle_action(self, param):
         ret_val = phantom.APP_SUCCESS
 
@@ -626,23 +646,7 @@ class IronnetConnector(BaseConnector):
         elif action_id == 'irondefense_get_events':
             ret_val = self._handle_irondefense_get_events(param)
         elif action_id == 'on_poll':
-            alert_ret_val = phantom.APP_SUCCESS
-            dome_ret_val = phantom.APP_SUCCESS
-            event_ret_val = phantom.APP_SUCCESS
-
-            if self._enable_alert_notifications:
-                alert_ret_val = self._handle_irondefense_get_alert_notifications()
-            else:
-                self.save_progress('Fetching alert notifications is disabled')
-            if self._enable_dome_notifications:
-                dome_ret_val = self._handle_irondefense_get_dome_notifications()
-            else:
-                self.save_progress('Fetching dome notifications is disabled')
-            if self._enable_event_notifications:
-                event_ret_val = self._handle_irondefense_get_event_notifications()
-            else:
-                self.save_progress('Fetching event notifications is disabled')
-            ret_val = alert_ret_val and dome_ret_val and event_ret_val
+            ret_val = self._handle_on_poll(param)
         elif action_id == 'irondefense_get_alerts':
             ret_val = self._handle_irondefense_get_alerts(param)
         elif action_id == 'irondefense_get_event':
