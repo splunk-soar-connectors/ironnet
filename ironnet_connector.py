@@ -689,7 +689,7 @@ class IronnetConnector(BaseConnector):
             self._alert_severity_upper = int(config.get('alert_severity_upper'))
             if self._alert_severity_lower >= self._alert_severity_upper:
                 self.save_progress(
-                    f'Initialization Failed: Invalid Range for Alert Severity- {self._alert_severity_lower} ' +
+                    f'Initialization Failed: Invalid Range for Alert Severity- {self._alert_severity_lower} '
                     f'is not lower than {self._alert_severity_upper}'
                 )
                 return phantom.APP_ERROR
@@ -731,7 +731,7 @@ class IronnetConnector(BaseConnector):
             self._event_severity_upper = int(config.get('event_severity_upper'))
             if self._event_severity_lower >= self._event_severity_upper:
                 self.save_progress(
-                    f'Initialization Failed: Invalid Range for Event Severity- {self._event_severity_lower} ' +
+                    f'Initialization Failed: Invalid Range for Event Severity- {self._event_severity_lower} '
                     f'is not lower than {self._event_severity_upper}'
                 )
                 return phantom.APP_ERROR
