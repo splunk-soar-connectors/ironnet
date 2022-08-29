@@ -46,121 +46,103 @@
         "enable_alert_notifications": {
             "description": "Ingest IronDefense Alert Notifications into Phantom",
             "data_type": "boolean",
-            "required": false,
             "default": true,
             "order": 4
         },
         "alert_notification_actions": {
-            "description": "Alert Notification Actions to include for ingest (if ingest is enabled).  Enter in CSV format.",
+            "description": "Alert Notification Actions to include for ingest (if ingest is enabled).  Enter in CSV format",
             "data_type": "string",
-            "required": false,
             "default": "Alert Created",
             "order": 5
         },
         "alert_categories": {
-            "description": "Alert Categories to exclude from ingest (if ingest is enabled).  Enter in CSV format.",
+            "description": "Alert Categories to exclude from ingest (if ingest is enabled).  Enter in CSV format",
             "data_type": "string",
-            "required": false,
             "order": 6
         },
         "alert_subcategories": {
-            "description": "Alert SubCategories to exclude from ingest (if ingest is enabled). Enter in CSV format.",
+            "description": "Alert SubCategories to exclude from ingest (if ingest is enabled). Enter in CSV format",
             "data_type": "string",
-            "required": false,
             "order": 7
         },
         "alert_severity_lower": {
             "description": "Minimum Severity of Alerts to ingest (if ingest is enabled)",
             "data_type": "numeric",
-            "required": false,
             "default": 500,
             "order": 8
         },
         "alert_severity_upper": {
             "description": "Maximum Severity of Alerts to ingest (if ingest is enabled)",
             "data_type": "numeric",
-            "required": false,
             "default": 1000,
             "order": 9
         },
         "alert_limit": {
             "description": "Limit of Alert Notifications to ingest at a time (if ingest is enabled)",
             "data_type": "numeric",
-            "required": false,
             "default": 500,
             "order": 10
         },
         "enable_dome_notifications": {
             "description": "Ingest IronDefense Dome Notifications into Phantom",
             "data_type": "boolean",
-            "required": false,
             "default": false,
             "order": 11
         },
         "dome_categories": {
-            "description": "Dome Categories to exclude from ingest (if ingest is enabled).  Enter in CSV format.",
+            "description": "Dome Categories to exclude from ingest (if ingest is enabled).  Enter in CSV format",
             "data_type": "string",
-            "required": false,
             "order": 12
         },
         "dome_limit": {
             "description": "Limit of Dome Notifications to ingest at a time (if ingest is enabled)",
             "data_type": "numeric",
-            "required": false,
             "default": 500,
             "order": 13
         },
         "enable_event_notifications": {
             "description": "Ingest IronDefense Event Notifications into Phantom",
             "data_type": "boolean",
-            "required": false,
             "default": false,
             "order": 14
         },
         "event_notification_actions": {
-            "description": "Event Notification Actions to include for ingest (if ingest is enabled).  Enter in CSV format.",
+            "description": "Event Notification Actions to include for ingest (if ingest is enabled).  Enter in CSV format",
             "data_type": "string",
-            "required": false,
             "default": "Event Created",
             "order": 15
         },
         "event_categories": {
-            "description": "Event Categories to exclude from ingest (if ingest is enabled).  Enter in CSV format.",
+            "description": "Event Categories to exclude from ingest (if ingest is enabled).  Enter in CSV format",
             "data_type": "string",
-            "required": false,
             "order": 16
         },
         "event_subcategories": {
-            "description": "Event SubCategories to exclude from ingest (if ingest is enabled). Enter in CSV format.",
+            "description": "Event SubCategories to exclude from ingest (if ingest is enabled). Enter in CSV format",
             "data_type": "string",
-            "required": false,
             "order": 17
         },
         "event_severity_lower": {
             "description": "Minimum Severity of Events to ingest (if ingest is enabled)",
             "data_type": "numeric",
-            "required": false,
             "default": 500,
             "order": 18
         },
         "event_severity_upper": {
             "description": "Maximum Severity of Events to ingest (if ingest is enabled)",
             "data_type": "numeric",
-            "required": false,
             "default": 1000,
             "order": 19
         },
         "event_limit": {
             "description": "Limit of Event Notifications to ingest at a time (if ingest is enabled)",
             "data_type": "numeric",
-            "required": false,
             "default": 500,
             "order": 20
         },
         "store_event_notifs_in_alert_containers": {
-            "description": "Store Event Notification in Alert Containers. If selected, Event Notifications will be stored as artifacts in the container of their corresponding Alert (Note that if this option is selected, any Event Notifications prior to the event being associated with the alert will not be ingested). If left unselected, Event Notifications will be stored as artifacts in their own container.",
+            "description": "Store Event Notification in Alert Containers. If selected, Event Notifications will be stored as artifacts in the container of their corresponding Alert (Note that if this option is selected, any Event Notifications prior to the event being associated with the alert will not be ingested). If left unselected, Event Notifications will be stored as artifacts in their own container",
             "data_type": "boolean",
-            "required": false,
             "default": true,
             "order": 21
         }
@@ -524,13 +506,11 @@
                 "description": {
                     "description": "Description of the observed bad activity",
                     "data_type": "string",
-                    "required": false,
                     "order": 1
                 },
                 "domain": {
                     "description": "Domain associated with the observed bad activity",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "domain"
@@ -540,7 +520,6 @@
                 "ip": {
                     "description": "IP associated with the observed bad activity",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "ip"
@@ -556,7 +535,6 @@
                 "activity_end_time": {
                     "description": "End time of observed bad activity - in RFC3339 format (https://tools.ietf.org/html/rfc3339)",
                     "data_type": "string",
-                    "required": false,
                     "order": 5
                 }
             },
@@ -1045,7 +1023,6 @@
                     "description": "The ID of the alert associated with the events to retrieve",
                     "data_type": "string",
                     "required": true,
-                    "primary": true,
                     "order": 0
                 }
             },
@@ -1298,36 +1275,24 @@
                 {
                     "data_path": "action_result.data.*.events.*.src_entity_attribute",
                     "data_type": "string",
-                    "example_values": [
-                        ""
-                    ],
                     "column_name": "Source Entity Attribute",
                     "column_order": 22
                 },
                 {
                     "data_path": "action_result.data.*.events.*.src_entity_attribute_type",
                     "data_type": "string",
-                    "example_values": [
-                        ""
-                    ],
                     "column_name": "Source Entity Attribute Type",
                     "column_order": 23
                 },
                 {
                     "data_path": "action_result.data.*.events.*.dst_entity_attribute",
                     "data_type": "string",
-                    "example_values": [
-                        ""
-                    ],
                     "column_name": "Destination Entity Attribute",
                     "column_order": 24
                 },
                 {
                     "data_path": "action_result.data.*.events.*.dst_entity_attribute_type",
                     "data_type": "string",
-                    "example_values": [
-                        ""
-                    ],
                     "column_name": "Destination Entity Attribute Type",
                     "column_order": 25
                 },
@@ -1447,39 +1412,33 @@
             "read_only": false,
             "parameters": {
                 "alert_id": {
-                    "description": "The IDs of the IronDefense alerts to filter. Enter in CSV format.",
+                    "description": "The IDs of the IronDefense alerts to filter. Enter in CSV format",
                     "data_type": "string",
-                    "required": false,
                     "order": 0
                 },
                 "category": {
-                    "description": "The categories of the IronDefense alerts to filter. Enter in CSV format.",
+                    "description": "The categories of the IronDefense alerts to filter. Enter in CSV format",
                     "data_type": "string",
-                    "required": false,
                     "order": 1
                 },
                 "sub_category": {
-                    "description": "The subcategories of the IronDefense alerts to filter. Enter in CSV format.",
+                    "description": "The subcategories of the IronDefense alerts to filter. Enter in CSV format",
                     "data_type": "string",
-                    "required": false,
                     "order": 2
                 },
                 "status": {
-                    "description": "The statuses of the IronDefense alerts to filter. Enter in CSV format.",
+                    "description": "The statuses of the IronDefense alerts to filter. Enter in CSV format",
                     "data_type": "string",
-                    "required": false,
                     "order": 3
                 },
                 "min_severity": {
-                    "description": "The minimum severity of IronDefense alerts to filter.",
+                    "description": "The minimum severity of IronDefense alerts to filter",
                     "data_type": "numeric",
-                    "required": false,
                     "order": 4
                 },
                 "max_severity": {
-                    "description": "The maximum severity of IronDefense alerts to filter.",
+                    "description": "The maximum severity of IronDefense alerts to filter",
                     "data_type": "numeric",
-                    "required": false,
                     "order": 5
                 }
             },
@@ -1729,7 +1688,6 @@
                     "description": "The ID of the event to retrieve",
                     "data_type": "string",
                     "required": true,
-                    "primary": true,
                     "order": 0
                 }
             },
@@ -1993,9 +1951,6 @@
                 {
                     "data_path": "action_result.data.*.event.src_entity_attribute",
                     "data_type": "string",
-                    "example_values": [
-                        ""
-                    ],
                     "column_name": "Source Entity Attribute",
                     "column_order": 23
                 },
@@ -2011,9 +1966,6 @@
                 {
                     "data_path": "action_result.data.*.event.dst_entity_attribute",
                     "data_type": "string",
-                    "example_values": [
-                        ""
-                    ],
                     "column_name": "Destination Entity Attribute",
                     "column_order": 25
                 },
