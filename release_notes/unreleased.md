@@ -1,3 +1,3 @@
 **Unreleased**
-* Upgrade splunk soar app to python 3
+* Compatibility changes for Python 3 support
 * Lint using yapf
