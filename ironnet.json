@@ -45,7 +45,7 @@
             "order": 3
         },
         "enable_alert_notifications": {
-            "description": "Ingest IronDefense Alert Notifications into Phantom",
+            "description": "Ingest IronDefense Alert Notifications",
             "data_type": "boolean",
             "default": true,
             "order": 4
@@ -85,7 +85,7 @@
             "order": 10
         },
         "enable_dome_notifications": {
-            "description": "Ingest IronDefense Dome Notifications into Phantom",
+            "description": "Ingest IronDefense Dome Notifications",
             "data_type": "boolean",
             "default": false,
             "order": 11
@@ -102,7 +102,7 @@
             "order": 13
         },
         "enable_event_notifications": {
-            "description": "Ingest IronDefense Event Notifications into Phantom",
+            "description": "Ingest IronDefense Event Notifications",
             "data_type": "boolean",
             "default": false,
             "order": 14
@@ -1372,7 +1372,7 @@
         {
             "action": "on poll",
             "identifier": "on_poll",
-            "description": "Ingests Configured Notifications from IronDefense into Phantom",
+            "description": "Ingests Configured Notifications from IronDefense",
             "type": "ingest",
             "read_only": true,
             "parameters": {},
