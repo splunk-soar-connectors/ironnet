@@ -364,7 +364,7 @@ class IronnetConnector(BaseConnector):
         # make rest call
         ret_val, response = self._make_post('/GetAlertNotifications', action_result, data=request, headers=None)
         if phantom.is_success(ret_val):
-            self.save_progress('Fetching alert notifications was successful')
+            self.save_progress(f"Fetching alert notifications was successful, , got {len(response['alert_notifications'])} notifications")
             # Filter the response
             for alert_notification in response['alert_notifications']:
                 if alert_notification['alert_action'] in self._alert_notification_actions and alert_notification['alert']:
@@ -419,7 +419,7 @@ class IronnetConnector(BaseConnector):
         # make rest call
         ret_val, response = self._make_post('/GetDomeNotifications', action_result, data=request, headers=None)
         if phantom.is_success(ret_val):
-            self.save_progress('Fetching dome notifications was successful')
+            self.save_progress(f"Fetching dome notifications was successful, got {len(response['dome_notifications'])} notifications")
             # Filter the response
             for dome_notification in response['dome_notifications']:
                 if dome_notification['category'] not in self._dome_categories:
@@ -469,7 +469,7 @@ class IronnetConnector(BaseConnector):
         # make rest call
         ret_val, response = self._make_post('/GetEventNotifications', action_result, data=request, headers=None)
         if phantom.is_success(ret_val):
-            self.save_progress('Fetching event notifications was successful')
+            self.save_progress(f"Fetching event notifications was successful, got {len(response['event_notifications'])} notifications")
             # Filter the response
             for event_notification in response['event_notifications']:
                 if event_notification['event_action'] in self._event_notification_actions and event_notification['event']:
