@@ -426,8 +426,9 @@ class IronnetConnector(BaseConnector):
                     for alert_id in dome_notification['alert_ids']:
                         # create or find container
                         container = {
-                            'name': alert_id,
+                            'name': dome_notification["category"][4:].replace("_", " "),
                             'source_data_identifier': alert_id,
+                            'description': 'Alert container with Dome notifications',
                         }
                         container_status, container_msg, container_id = self.save_container(container)
                         if container_status == phantom.APP_ERROR:
