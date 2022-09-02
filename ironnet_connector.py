@@ -373,7 +373,7 @@ class IronnetConnector(BaseConnector):
                         if self._alert_severity_lower <= int(alert['severity']) <= self._alert_severity_upper:
                             # create container
                             container = {
-                                'name': alert['id'],
+                                'name': f"{alert['category']}/{alert['sub_category']}",
                                 'kill_chain': alert['category'],
                                 'description': f'IronDefense {alert["category"]}/{alert["sub_category"]} alert',
                                 'source_data_identifier': alert['id'],
@@ -479,7 +479,7 @@ class IronnetConnector(BaseConnector):
                             if self._store_event_notifs_in_alert_containers:
                                 # store in alert container
                                 container = {
-                                    'name': event['alert_id'],
+                                    'name': f'{event["category"]}/{event["sub_category"]}',
                                     'source_data_identifier': event['alert_id'],
                                 }
                                 container_status, container_msg, container_id = self.save_container(container)
@@ -500,7 +500,7 @@ class IronnetConnector(BaseConnector):
                             else:
                                 # store in event container
                                 container = {
-                                    'name': event['id'],
+                                    'name': f'{event["category"]}/{event["sub_category"]}',
                                     'kill_chain': event['category'],
                                     'description': f'IronDefense {event["category"]}/{event["sub_category"]} event',
                                     'source_data_identifier': event['id'],
