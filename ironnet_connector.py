@@ -672,7 +672,7 @@ class IronnetConnector(BaseConnector):
         # get the asset config
         config = self.get_config()
 
-        self._base_url = config.get('base_url')
+        self._base_url = config.get('base_url') + '/IronApi'
         self._username = config.get('username')
         self._password = config.get('password')
         self._verify_server_cert = config.get('verify_server_cert')
