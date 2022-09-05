@@ -121,7 +121,7 @@ class IronnetConnector(BaseConnector):
             return RetVal(phantom.APP_SUCCESS, resp_json)
 
         # You should process the error returned in the json
-        message = f'Error from server. Status Code: {r.status_code} Data from server: {r.text.replace("{", "{{").replace("}", "}}")}'
+        message = f"Error from server. Status Code: {r.status_code} Data from server: {r.text.replace('{', '{{').replace('}', '}}')}"
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -153,7 +153,7 @@ class IronnetConnector(BaseConnector):
 
         # everything else is actually an error at this point
         message = f'Can\'t process response from server. Status Code: {r.status_code} ' +\
-                  f'Data from server: {r.text.replace("{", "{{").replace("}", "}}")}'
+                  f"Data from server: {r.text.replace('{', '{{').replace('}', '}}')}"
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -375,7 +375,7 @@ class IronnetConnector(BaseConnector):
                             container = {
                                 'name': f"{alert['category']}/{alert['sub_category']}",
                                 'kill_chain': alert['category'],
-                                'description': f'IronDefense {alert["category"]}/{alert["sub_category"]} alert',
+                                'description': f"IronDefense {alert['category']}/{alert['sub_category']} alert",
                                 'source_data_identifier': alert['id'],
                                 'data': alert,
                             }
@@ -389,9 +389,9 @@ class IronnetConnector(BaseConnector):
                             # add notification as artifact of container
                             artifact = {
                                 'data': alert_notification,
-                                'name': f'{alert_notification["alert_action"][4:].replace("_", " ")} ALERT NOTIFICATION',
+                                'name': f"{alert_notification['alert_action'][4:].replace('_', ' ')} ALERT NOTIFICATION",
                                 'container_id': container_id,
-                                'source_data_identifier': f'{alert["id"]}-{alert["updated"]}',
+                                'source_data_identifier': f"{alert['id']}-{alert['updated']}",
                                 'start_time': alert['updated']
                             }
                             artifact_status, artifact_msg, artifact_id = self.save_artifact(artifact)
@@ -440,7 +440,7 @@ class IronnetConnector(BaseConnector):
                         # add notification as artifact of container
                         artifact = {
                             'data': dome_notification,
-                            'name': f'{dome_notification["category"][4:].replace("_", " ")} DOME NOTIFICATION',
+                            'name': f"{dome_notification['category'][4:].replace('_', ' ')} DOME NOTIFICATION",
                             'container_id': container_id,
                             'source_data_identifier': str(dome_notification['id']),
                             'start_time': dome_notification['created']
@@ -480,7 +480,7 @@ class IronnetConnector(BaseConnector):
                             if self._store_event_notifs_in_alert_containers:
                                 # store in alert container
                                 container = {
-                                    'name': f'{event["category"]}/{event["sub_category"]}',
+                                    'name': f"{event['category']}/{event['sub_category']}",
                                     'source_data_identifier': event['alert_id'],
                                 }
                                 container_status, container_msg, container_id = self.save_container(container)
@@ -493,17 +493,17 @@ class IronnetConnector(BaseConnector):
                                 # add notification as artifact of container
                                 artifact = {
                                     'data': event_notification,
-                                    'name': f'{event_notification["event_action"][4:].replace("_", " ")} EVENT NOTIFICATION',
+                                    'name': f"{event_notification['event_action'][4:].replace('_', ' ')} EVENT NOTIFICATION",
                                     'container_id': container_id,
-                                    'source_data_identifier': f'{event["id"]}-{event["updated"]}',
+                                    'source_data_identifier': f"{event['id']}-{event['updated']}",
                                     'start_time': event['updated']
                                 }
                             else:
                                 # store in event container
                                 container = {
-                                    'name': f'{event["category"]}/{event["sub_category"]}',
+                                    'name': f"{event['category']}/{event['sub_category']}",
                                     'kill_chain': event['category'],
-                                    'description': f'IronDefense {event["category"]}/{event["sub_category"]} event',
+                                    'description': f"IronDefense {event['category']}/{event['sub_category']} event",
                                     'source_data_identifier': event['id'],
                                     'data': event,
                                 }
@@ -517,9 +517,9 @@ class IronnetConnector(BaseConnector):
                                 # add notification as artifact of container
                                 artifact = {
                                     'data': event_notification,
-                                    'name': f'{event_notification["event_action"][4:].replace("_", " ")} EVENT NOTIFICATION',
+                                    'name': f"{event_notification['event_action'][4:].replace('_', ' ')} EVENT NOTIFICATION",
                                     'container_id': container_id,
-                                    'source_data_identifier': f'{event["id"]}-{event["updated"]}',
+                                    'source_data_identifier': f"{event['id']}-{event['updated']}",
                                     'start_time': event['updated']
                                 }
                             artifact_status, artifact_msg, artifact_id = self.save_artifact(artifact)
@@ -714,7 +714,7 @@ class IronnetConnector(BaseConnector):
         if self._enable_dome_notifications:
             dome_cats = config.get('dome_categories')
             if dome_cats:
-                self._dome_categories = [f'DNC_{str(cat).strip().replace(" ", "_").upper()}' for cat in dome_cats.split(',') if cat.strip()]
+                self._dome_categories = [f"DNC_{str(cat).strip().replace(' ', '_').upper()}" for cat in dome_cats.split(',') if cat.strip()]
             else:
                 self._dome_categories = []
             self._dome_limit = int(config.get('dome_limit'))
