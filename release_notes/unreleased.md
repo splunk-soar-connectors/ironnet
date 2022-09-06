@@ -1,6 +1,6 @@
 **Unreleased**
 
 * Format changes
-* Add API url prefix
-* Name events and container with category and subcategory instead of ID
-* Remove mentions of "Phantom" keyword in configuration file
+* Added API url postfix
+* Updated events and containers name with category and subcategory instead of ID
+* Removed "Phantom" keyword from the app document
