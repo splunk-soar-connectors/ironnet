@@ -2,7 +2,7 @@
 # IronNet
 
 Publisher: IronNet  
-Connector Version: 2\.0\.0  
+Connector Version: 2\.1\.0  
 Product Vendor: IronNet  
 Product Name: IronDefense  
 Product Version Supported (regex): "\.\*"  
@@ -33,17 +33,17 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **verify\_server\_cert** |  optional  | boolean | Validate the IronAPI certificate
 **username** |  required  | string | The username to use for authentication
 **password** |  required  | password | The password to use for authentication
-**enable\_alert\_notifications** |  optional  | boolean | Ingest IronDefense Alert Notifications into Phantom
+**enable\_alert\_notifications** |  optional  | boolean | Ingest IronDefense Alert Notifications
 **alert\_notification\_actions** |  optional  | string | Alert Notification Actions to include for ingest \(if ingest is enabled\)\.  Enter in CSV format
 **alert\_categories** |  optional  | string | Alert Categories to exclude from ingest \(if ingest is enabled\)\.  Enter in CSV format
 **alert\_subcategories** |  optional  | string | Alert SubCategories to exclude from ingest \(if ingest is enabled\)\. Enter in CSV format
 **alert\_severity\_lower** |  optional  | numeric | Minimum Severity of Alerts to ingest \(if ingest is enabled\)
 **alert\_severity\_upper** |  optional  | numeric | Maximum Severity of Alerts to ingest \(if ingest is enabled\)
 **alert\_limit** |  optional  | numeric | Limit of Alert Notifications to ingest at a time \(if ingest is enabled\)
-**enable\_dome\_notifications** |  optional  | boolean | Ingest IronDefense Dome Notifications into Phantom
+**enable\_dome\_notifications** |  optional  | boolean | Ingest IronDefense Dome Notifications
 **dome\_categories** |  optional  | string | Dome Categories to exclude from ingest \(if ingest is enabled\)\.  Enter in CSV format
 **dome\_limit** |  optional  | numeric | Limit of Dome Notifications to ingest at a time \(if ingest is enabled\)
-**enable\_event\_notifications** |  optional  | boolean | Ingest IronDefense Event Notifications into Phantom
+**enable\_event\_notifications** |  optional  | boolean | Ingest IronDefense Event Notifications
 **event\_notification\_actions** |  optional  | string | Event Notification Actions to include for ingest \(if ingest is enabled\)\.  Enter in CSV format
 **event\_categories** |  optional  | string | Event Categories to exclude from ingest \(if ingest is enabled\)\.  Enter in CSV format
 **event\_subcategories** |  optional  | string | Event SubCategories to exclude from ingest \(if ingest is enabled\)\. Enter in CSV format
@@ -60,7 +60,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [report bad activity](#action-report-bad-activity) - Reports observed bad activity to IronDefense  
 [get community info](#action-get-community-info) - Gets community information related to an IronDefense alert  
 [get events](#action-get-events) - Retrieves IronDefense Events for a given Alert ID  
-[on poll](#action-on-poll) - Ingests Configured Notifications from IronDefense into Phantom  
+[on poll](#action-on-poll) - Ingests Configured Notifications from IronDefense  
 [get alerts](#action-get-alerts) - Retrieves Alerts within IronDefense  
 [get event](#action-get-event) - Retrieves IronDefense Event for a given Event ID  
 
@@ -317,7 +317,7 @@ action\_result\.data\.\*\.constraint\.limit | numeric |
 action\_result\.data\.\*\.constraint\.offset | numeric |   
 
 ## action: 'on poll'
-Ingests Configured Notifications from IronDefense into Phantom
+Ingests Configured Notifications from IronDefense
 
 Type: **ingest**  
 Read only: **True**
