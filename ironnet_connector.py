@@ -121,7 +121,7 @@ class IronnetConnector(BaseConnector):
             return RetVal(phantom.APP_SUCCESS, resp_json)
 
         # You should process the error returned in the json
-        message = f'Error from server. Status Code: {r.status_code} Data from server: {r.text.replace("{", "{{").replace("}", "}}")}'
+        message = f"Error from server. Status Code: {r.status_code} Data from server: {r.text.replace('{', '{{').replace('}', '}}')}"
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -153,7 +153,7 @@ class IronnetConnector(BaseConnector):
 
         # everything else is actually an error at this point
         message = f'Can\'t process response from server. Status Code: {r.status_code} ' +\
-                  f'Data from server: {r.text.replace("{", "{{").replace("}", "}}")}'
+                  f"Data from server: {r.text.replace('{', '{{').replace('}', '}}')}"
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -364,7 +364,7 @@ class IronnetConnector(BaseConnector):
         # make rest call
         ret_val, response = self._make_post('/GetAlertNotifications', action_result, data=request, headers=None)
         if phantom.is_success(ret_val):
-            self.save_progress('Fetching alert notifications was successful')
+            self.save_progress(f"Fetching alert notifications was successful, , got {len(response['alert_notifications'])} notifications")
             # Filter the response
             for alert_notification in response['alert_notifications']:
                 if alert_notification['alert_action'] in self._alert_notification_actions and alert_notification['alert']:
@@ -373,9 +373,9 @@ class IronnetConnector(BaseConnector):
                         if self._alert_severity_lower <= int(alert['severity']) <= self._alert_severity_upper:
                             # create container
                             container = {
-                                'name': alert['id'],
+                                'name': f"{alert['category']}/{alert['sub_category']}",
                                 'kill_chain': alert['category'],
-                                'description': f'IronDefense {alert["category"]}/{alert["sub_category"]} alert',
+                                'description': f"IronDefense {alert['category']}/{alert['sub_category']} alert",
                                 'source_data_identifier': alert['id'],
                                 'data': alert,
                             }
@@ -389,9 +389,9 @@ class IronnetConnector(BaseConnector):
                             # add notification as artifact of container
                             artifact = {
                                 'data': alert_notification,
-                                'name': f'{alert_notification["alert_action"][4:].replace("_", " ")} ALERT NOTIFICATION',
+                                'name': f"{alert_notification['alert_action'][4:].replace('_', ' ')} ALERT NOTIFICATION",
                                 'container_id': container_id,
-                                'source_data_identifier': f'{alert["id"]}-{alert["updated"]}',
+                                'source_data_identifier': f"{alert['id']}-{alert['updated']}",
                                 'start_time': alert['updated']
                             }
                             artifact_status, artifact_msg, artifact_id = self.save_artifact(artifact)
@@ -419,15 +419,16 @@ class IronnetConnector(BaseConnector):
         # make rest call
         ret_val, response = self._make_post('/GetDomeNotifications', action_result, data=request, headers=None)
         if phantom.is_success(ret_val):
-            self.save_progress('Fetching dome notifications was successful')
+            self.save_progress(f"Fetching dome notifications was successful, got {len(response['dome_notifications'])} notifications")
             # Filter the response
             for dome_notification in response['dome_notifications']:
                 if dome_notification['category'] not in self._dome_categories:
                     for alert_id in dome_notification['alert_ids']:
                         # create or find container
                         container = {
-                            'name': alert_id,
+                            'name': dome_notification["category"][4:].replace("_", " "),
                             'source_data_identifier': alert_id,
+                            'description': 'Alert container with Dome notifications',
                         }
                         container_status, container_msg, container_id = self.save_container(container)
                         if container_status == phantom.APP_ERROR:
@@ -439,7 +440,7 @@ class IronnetConnector(BaseConnector):
                         # add notification as artifact of container
                         artifact = {
                             'data': dome_notification,
-                            'name': f'{dome_notification["category"][4:].replace("_", " ")} DOME NOTIFICATION',
+                            'name': f"{dome_notification['category'][4:].replace('_', ' ')} DOME NOTIFICATION",
                             'container_id': container_id,
                             'source_data_identifier': str(dome_notification['id']),
                             'start_time': dome_notification['created']
@@ -469,7 +470,7 @@ class IronnetConnector(BaseConnector):
         # make rest call
         ret_val, response = self._make_post('/GetEventNotifications', action_result, data=request, headers=None)
         if phantom.is_success(ret_val):
-            self.save_progress('Fetching event notifications was successful')
+            self.save_progress(f"Fetching event notifications was successful, got {len(response['event_notifications'])} notifications")
             # Filter the response
             for event_notification in response['event_notifications']:
                 if event_notification['event_action'] in self._event_notification_actions and event_notification['event']:
@@ -479,7 +480,7 @@ class IronnetConnector(BaseConnector):
                             if self._store_event_notifs_in_alert_containers:
                                 # store in alert container
                                 container = {
-                                    'name': event['alert_id'],
+                                    'name': f"{event['category']}/{event['sub_category']}",
                                     'source_data_identifier': event['alert_id'],
                                 }
                                 container_status, container_msg, container_id = self.save_container(container)
@@ -492,17 +493,17 @@ class IronnetConnector(BaseConnector):
                                 # add notification as artifact of container
                                 artifact = {
                                     'data': event_notification,
-                                    'name': f'{event_notification["event_action"][4:].replace("_", " ")} EVENT NOTIFICATION',
+                                    'name': f"{event_notification['event_action'][4:].replace('_', ' ')} EVENT NOTIFICATION",
                                     'container_id': container_id,
-                                    'source_data_identifier': f'{event["id"]}-{event["updated"]}',
+                                    'source_data_identifier': f"{event['id']}-{event['updated']}",
                                     'start_time': event['updated']
                                 }
                             else:
                                 # store in event container
                                 container = {
-                                    'name': event['id'],
+                                    'name': f"{event['category']}/{event['sub_category']}",
                                     'kill_chain': event['category'],
-                                    'description': f'IronDefense {event["category"]}/{event["sub_category"]} event',
+                                    'description': f"IronDefense {event['category']}/{event['sub_category']} event",
                                     'source_data_identifier': event['id'],
                                     'data': event,
                                 }
@@ -516,9 +517,9 @@ class IronnetConnector(BaseConnector):
                                 # add notification as artifact of container
                                 artifact = {
                                     'data': event_notification,
-                                    'name': f'{event_notification["event_action"][4:].replace("_", " ")} EVENT NOTIFICATION',
+                                    'name': f"{event_notification['event_action'][4:].replace('_', ' ')} EVENT NOTIFICATION",
                                     'container_id': container_id,
-                                    'source_data_identifier': f'{event["id"]}-{event["updated"]}',
+                                    'source_data_identifier': f"{event['id']}-{event['updated']}",
                                     'start_time': event['updated']
                                 }
                             artifact_status, artifact_msg, artifact_id = self.save_artifact(artifact)
@@ -671,7 +672,7 @@ class IronnetConnector(BaseConnector):
         # get the asset config
         config = self.get_config()
 
-        self._base_url = config.get('base_url')
+        self._base_url = config.get('base_url') + '/IronApi'
         self._username = config.get('username')
         self._password = config.get('password')
         self._verify_server_cert = config.get('verify_server_cert')
@@ -713,7 +714,7 @@ class IronnetConnector(BaseConnector):
         if self._enable_dome_notifications:
             dome_cats = config.get('dome_categories')
             if dome_cats:
-                self._dome_categories = [f'DNC_{str(cat).strip().replace(" ", "_").upper()}' for cat in dome_cats.split(',') if cat.strip()]
+                self._dome_categories = [f"DNC_{str(cat).strip().replace(' ', '_').upper()}" for cat in dome_cats.split(',') if cat.strip()]
             else:
                 self._dome_categories = []
             self._dome_limit = int(config.get('dome_limit'))
