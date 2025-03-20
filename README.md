@@ -1,447 +1,480 @@
-[comment]: # "Auto-generated SOAR connector documentation"
 # IronNet
 
-Publisher: IronNet  
-Connector Version: 2\.1\.0  
-Product Vendor: IronNet  
-Product Name: IronDefense  
-Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.3\.0  
+Publisher: IronNet \
+Connector Version: 2.1.0 \
+Product Vendor: IronNet \
+Product Name: IronDefense \
+Minimum Product Version: 5.3.0
 
 This app provides generic actions for interacting with IronDefense
 
-[comment]: # " File: README.md"
-[comment]: # "  Licensed under the Apache License, Version 2.0 (the 'License');"
-[comment]: # "  you may not use this file except in compliance with the License."
-[comment]: # "  You may obtain a copy of the License at"
-[comment]: # "      http://www.apache.org/licenses/LICENSE-2.0"
-[comment]: # "  Unless required by applicable law or agreed to in writing, software distributed under"
-[comment]: # "  the License is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,"
-[comment]: # "  either express or implied. See the License for the specific language governing permissions"
-[comment]: # "  and limitations under the License."
-[comment]: # ""
-This app integrates with IronNet's IronDefense platform to facilitate investigation, hunt, and alert
-triage
+### Configuration variables
 
-
-### Configuration Variables
-The below configuration variables are required for this Connector to operate.  These variables are specified when configuring a IronDefense asset in SOAR.
+This table lists the configuration variables required to operate IronNet. These variables are specified when configuring a IronDefense asset in Splunk SOAR.
 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
-**base\_url** |  required  | string | The base URL for the IronAPI
-**verify\_server\_cert** |  optional  | boolean | Validate the IronAPI certificate
-**username** |  required  | string | The username to use for authentication
-**password** |  required  | password | The password to use for authentication
-**enable\_alert\_notifications** |  optional  | boolean | Ingest IronDefense Alert Notifications
-**alert\_notification\_actions** |  optional  | string | Alert Notification Actions to include for ingest \(if ingest is enabled\)\.  Enter in CSV format
-**alert\_categories** |  optional  | string | Alert Categories to exclude from ingest \(if ingest is enabled\)\.  Enter in CSV format
-**alert\_subcategories** |  optional  | string | Alert SubCategories to exclude from ingest \(if ingest is enabled\)\. Enter in CSV format
-**alert\_severity\_lower** |  optional  | numeric | Minimum Severity of Alerts to ingest \(if ingest is enabled\)
-**alert\_severity\_upper** |  optional  | numeric | Maximum Severity of Alerts to ingest \(if ingest is enabled\)
-**alert\_limit** |  optional  | numeric | Limit of Alert Notifications to ingest at a time \(if ingest is enabled\)
-**enable\_dome\_notifications** |  optional  | boolean | Ingest IronDefense Dome Notifications
-**dome\_categories** |  optional  | string | Dome Categories to exclude from ingest \(if ingest is enabled\)\.  Enter in CSV format
-**dome\_limit** |  optional  | numeric | Limit of Dome Notifications to ingest at a time \(if ingest is enabled\)
-**enable\_event\_notifications** |  optional  | boolean | Ingest IronDefense Event Notifications
-**event\_notification\_actions** |  optional  | string | Event Notification Actions to include for ingest \(if ingest is enabled\)\.  Enter in CSV format
-**event\_categories** |  optional  | string | Event Categories to exclude from ingest \(if ingest is enabled\)\.  Enter in CSV format
-**event\_subcategories** |  optional  | string | Event SubCategories to exclude from ingest \(if ingest is enabled\)\. Enter in CSV format
-**event\_severity\_lower** |  optional  | numeric | Minimum Severity of Events to ingest \(if ingest is enabled\)
-**event\_severity\_upper** |  optional  | numeric | Maximum Severity of Events to ingest \(if ingest is enabled\)
-**event\_limit** |  optional  | numeric | Limit of Event Notifications to ingest at a time \(if ingest is enabled\)
-**store\_event\_notifs\_in\_alert\_containers** |  optional  | boolean | Store Event Notification in Alert Containers\. If selected, Event Notifications will be stored as artifacts in the container of their corresponding Alert \(Note that if this option is selected, any Event Notifications prior to the event being associated with the alert will not be ingested\)\. If left unselected, Event Notifications will be stored as artifacts in their own container
+**base_url** | required | string | The base URL for the IronAPI |
+**verify_server_cert** | optional | boolean | Validate the IronAPI certificate |
+**username** | required | string | The username to use for authentication |
+**password** | required | password | The password to use for authentication |
+**enable_alert_notifications** | optional | boolean | Ingest IronDefense Alert Notifications |
+**alert_notification_actions** | optional | string | Alert Notification Actions to include for ingest (if ingest is enabled). Enter in CSV format |
+**alert_categories** | optional | string | Alert Categories to exclude from ingest (if ingest is enabled). Enter in CSV format |
+**alert_subcategories** | optional | string | Alert SubCategories to exclude from ingest (if ingest is enabled). Enter in CSV format |
+**alert_severity_lower** | optional | numeric | Minimum Severity of Alerts to ingest (if ingest is enabled) |
+**alert_severity_upper** | optional | numeric | Maximum Severity of Alerts to ingest (if ingest is enabled) |
+**alert_limit** | optional | numeric | Limit of Alert Notifications to ingest at a time (if ingest is enabled) |
+**enable_dome_notifications** | optional | boolean | Ingest IronDefense Dome Notifications |
+**dome_categories** | optional | string | Dome Categories to exclude from ingest (if ingest is enabled). Enter in CSV format |
+**dome_limit** | optional | numeric | Limit of Dome Notifications to ingest at a time (if ingest is enabled) |
+**enable_event_notifications** | optional | boolean | Ingest IronDefense Event Notifications |
+**event_notification_actions** | optional | string | Event Notification Actions to include for ingest (if ingest is enabled). Enter in CSV format |
+**event_categories** | optional | string | Event Categories to exclude from ingest (if ingest is enabled). Enter in CSV format |
+**event_subcategories** | optional | string | Event SubCategories to exclude from ingest (if ingest is enabled). Enter in CSV format |
+**event_severity_lower** | optional | numeric | Minimum Severity of Events to ingest (if ingest is enabled) |
+**event_severity_upper** | optional | numeric | Maximum Severity of Events to ingest (if ingest is enabled) |
+**event_limit** | optional | numeric | Limit of Event Notifications to ingest at a time (if ingest is enabled) |
+**store_event_notifs_in_alert_containers** | optional | boolean | Store Event Notification in Alert Containers. If selected, Event Notifications will be stored as artifacts in the container of their corresponding Alert (Note that if this option is selected, any Event Notifications prior to the event being associated with the alert will not be ingested). If left unselected, Event Notifications will be stored as artifacts in their own container |
 
-### Supported Actions  
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration  
-[rate alert](#action-rate-alert) - Provides a rating for an Alert within IronDefense  
-[set alert status](#action-set-alert-status) - Sets the status of an Alert within IronDefense  
-[comment on alert](#action-comment-on-alert) - Adds a comment to an Alert within IronDefense  
-[report bad activity](#action-report-bad-activity) - Reports observed bad activity to IronDefense  
-[get community info](#action-get-community-info) - Gets community information related to an IronDefense alert  
-[get events](#action-get-events) - Retrieves IronDefense Events for a given Alert ID  
-[on poll](#action-on-poll) - Ingests Configured Notifications from IronDefense  
-[get alerts](#action-get-alerts) - Retrieves Alerts within IronDefense  
-[get event](#action-get-event) - Retrieves IronDefense Event for a given Event ID  
+### Supported Actions
+
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration \
+[rate alert](#action-rate-alert) - Provides a rating for an Alert within IronDefense \
+[set alert status](#action-set-alert-status) - Sets the status of an Alert within IronDefense \
+[comment on alert](#action-comment-on-alert) - Adds a comment to an Alert within IronDefense \
+[report bad activity](#action-report-bad-activity) - Reports observed bad activity to IronDefense \
+[get community info](#action-get-community-info) - Gets community information related to an IronDefense alert \
+[get events](#action-get-events) - Retrieves IronDefense Events for a given Alert ID \
+[on poll](#action-on-poll) - Ingests Configured Notifications from IronDefense \
+[get alerts](#action-get-alerts) - Retrieves Alerts within IronDefense \
+[get event](#action-get-event) - Retrieves IronDefense Event for a given Event ID
 
 ## action: 'test connectivity'
+
 Validate the asset configuration for connectivity using supplied configuration
 
-Type: **test**  
+Type: **test** \
 Read only: **True**
 
 #### Action Parameters
+
 No parameters are required for this action
 
 #### Action Output
-No Output  
+
+No Output
 
 ## action: 'rate alert'
+
 Provides a rating for an Alert within IronDefense
 
-Type: **generic**  
+Type: **generic** \
 Read only: **False**
 
 #### Action Parameters
+
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**alert\_id** |  required  | The ID of the IronDefense alert | string |  `irondefense alert id` 
-**analyst\_severity** |  required  | The severity of the alert | string | 
-**analyst\_expectation** |  required  | The analyst expectation for the alert | string | 
-**comment** |  required  | Text of comment | string | 
-**share\_comment\_with\_irondome** |  optional  | Shares the provided comment with IronDome | boolean | 
+**alert_id** | required | The ID of the IronDefense alert | string | `irondefense alert id` |
+**analyst_severity** | required | The severity of the alert | string | |
+**analyst_expectation** | required | The analyst expectation for the alert | string | |
+**comment** | required | Text of comment | string | |
+**share_comment_with_irondome** | optional | Shares the provided comment with IronDome | boolean | |
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.alert\_id | string |  `irondefense alert id` 
-action\_result\.parameter\.analyst\_expectation | string | 
-action\_result\.parameter\.analyst\_severity | string | 
-action\_result\.parameter\.comment | string | 
-action\_result\.parameter\.share\_comment\_with\_irondome | boolean | 
-action\_result\.data | string | 
-action\_result\.summary | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failed |
+action_result.parameter.alert_id | string | `irondefense alert id` | 0c740a2c-a566-4c95-a8be-5f48082de2b2 |
+action_result.parameter.analyst_expectation | string | | expected unexpected unknown |
+action_result.parameter.analyst_severity | string | | undecided benign suspicious malicious |
+action_result.parameter.comment | string | | |
+action_result.parameter.share_comment_with_irondome | boolean | | True False |
+action_result.data | string | | |
+action_result.summary | string | | |
+action_result.message | string | | |
+summary.total_objects | numeric | | |
+summary.total_objects_successful | numeric | | |
 
 ## action: 'set alert status'
+
 Sets the status of an Alert within IronDefense
 
-Type: **generic**  
+Type: **generic** \
 Read only: **False**
 
 #### Action Parameters
+
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**alert\_id** |  required  | The ID of the IronDefense alert | string |  `irondefense alert id` 
-**alert\_status** |  required  | The status of the alert | string | 
-**comment** |  required  | Text of comment | string | 
-**share\_comment\_with\_irondome** |  optional  | Shares the provided comment with IronDome | boolean | 
+**alert_id** | required | The ID of the IronDefense alert | string | `irondefense alert id` |
+**alert_status** | required | The status of the alert | string | |
+**comment** | required | Text of comment | string | |
+**share_comment_with_irondome** | optional | Shares the provided comment with IronDome | boolean | |
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.alert\_id | string |  `irondefense alert id` 
-action\_result\.parameter\.alert\_status | string | 
-action\_result\.parameter\.comment | string | 
-action\_result\.parameter\.share\_comment\_with\_irondome | boolean | 
-action\_result\.data | string | 
-action\_result\.summary | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failed |
+action_result.parameter.alert_id | string | `irondefense alert id` | 0c740a2c-a566-4c95-a8be-5f48082de2b2 |
+action_result.parameter.alert_status | string | | |
+action_result.parameter.comment | string | | |
+action_result.parameter.share_comment_with_irondome | boolean | | True False |
+action_result.data | string | | |
+action_result.summary | string | | |
+action_result.message | string | | |
+summary.total_objects | numeric | | |
+summary.total_objects_successful | numeric | | |
 
 ## action: 'comment on alert'
+
 Adds a comment to an Alert within IronDefense
 
-Type: **generic**  
+Type: **generic** \
 Read only: **False**
 
 #### Action Parameters
+
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**alert\_id** |  required  | The ID of the IronDefense alert | string |  `irondefense alert id` 
-**comment** |  required  | Text of comment | string | 
-**share\_comment\_with\_irondome** |  optional  | Shares the provided comment with IronDome | boolean | 
+**alert_id** | required | The ID of the IronDefense alert | string | `irondefense alert id` |
+**comment** | required | Text of comment | string | |
+**share_comment_with_irondome** | optional | Shares the provided comment with IronDome | boolean | |
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.alert\_id | string |  `irondefense alert id` 
-action\_result\.parameter\.comment | string | 
-action\_result\.parameter\.share\_comment\_with\_irondome | boolean | 
-action\_result\.data | string | 
-action\_result\.summary | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failed |
+action_result.parameter.alert_id | string | `irondefense alert id` | 0c740a2c-a566-4c95-a8be-5f48082de2b2 |
+action_result.parameter.comment | string | | |
+action_result.parameter.share_comment_with_irondome | boolean | | True False |
+action_result.data | string | | |
+action_result.summary | string | | |
+action_result.message | string | | |
+summary.total_objects | numeric | | |
+summary.total_objects_successful | numeric | | |
 
 ## action: 'report bad activity'
+
 Reports observed bad activity to IronDefense
 
-Type: **generic**  
+Type: **generic** \
 Read only: **False**
 
 #### Action Parameters
+
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**name** |  required  | Identifying name of the observed bad activity | string | 
-**description** |  optional  | Description of the observed bad activity | string | 
-**domain** |  optional  | Domain associated with the observed bad activity | string |  `domain` 
-**ip** |  optional  | IP associated with the observed bad activity | string |  `ip` 
-**activity\_start\_time** |  required  | Start time of observed bad activity \- in RFC3339 format \(https\://tools\.ietf\.org/html/rfc3339\) | string | 
-**activity\_end\_time** |  optional  | End time of observed bad activity \- in RFC3339 format \(https\://tools\.ietf\.org/html/rfc3339\) | string | 
+**name** | required | Identifying name of the observed bad activity | string | |
+**description** | optional | Description of the observed bad activity | string | |
+**domain** | optional | Domain associated with the observed bad activity | string | `domain` |
+**ip** | optional | IP associated with the observed bad activity | string | `ip` |
+**activity_start_time** | required | Start time of observed bad activity - in RFC3339 format (https://tools.ietf.org/html/rfc3339) | string | |
+**activity_end_time** | optional | End time of observed bad activity - in RFC3339 format (https://tools.ietf.org/html/rfc3339) | string | |
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.activity\_end\_time | string | 
-action\_result\.parameter\.activity\_start\_time | string | 
-action\_result\.parameter\.description | string | 
-action\_result\.parameter\.domain | string |  `domain` 
-action\_result\.parameter\.ip | string |  `ip` 
-action\_result\.parameter\.name | string | 
-action\_result\.data | string | 
-action\_result\.summary | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failed |
+action_result.parameter.activity_end_time | string | | 2019-10-24 10:36:43.676105+00 |
+action_result.parameter.activity_start_time | string | | 2019-10-24 09:36:43.676105+00 |
+action_result.parameter.description | string | | |
+action_result.parameter.domain | string | `domain` | |
+action_result.parameter.ip | string | `ip` | |
+action_result.parameter.name | string | | |
+action_result.data | string | | |
+action_result.summary | string | | |
+action_result.message | string | | |
+summary.total_objects | numeric | | |
+summary.total_objects_successful | numeric | | |
 
 ## action: 'get community info'
+
 Gets community information related to an IronDefense alert
 
-Type: **generic**  
+Type: **generic** \
 Read only: **False**
 
 #### Action Parameters
+
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**alert\_id** |  required  | The ID of the IronDefense alert | string |  `irondefense alert id` 
+**alert_id** | required | The ID of the IronDefense alert | string | `irondefense alert id` |
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.alert\_id | string |  `irondefense alert id` 
-action\_result\.data | string | 
-action\_result\.summary | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric | 
-action\_result\.data\.\*\.cognitive\_system\_score | numeric | 
-action\_result\.data\.\*\.community\_comments\.\*\.comment | string | 
-action\_result\.data\.\*\.community\_comments\.\*\.self | boolean | 
-action\_result\.data\.\*\.community\_comments\.\*\.created | string | 
-action\_result\.data\.\*\.community\_comments\.\*\.dome\_tags | string | 
-action\_result\.data\.\*\.community\_comments\.\*\.enterprise | boolean | 
-action\_result\.data\.\*\.correlations\.\*\.correlations\.\*\.enterprise\_correlations | numeric | 
-action\_result\.data\.\*\.correlations\.\*\.correlations\.\*\.ip | string |  `ip` 
-action\_result\.data\.\*\.correlations\.\*\.correlations\.\*\.domain | string |  `domain` 
-action\_result\.data\.\*\.correlations\.\*\.correlations\.\*\.community\_correlations | numeric | 
-action\_result\.data\.\*\.correlations\.\*\.dome\_tag | string | 
-action\_result\.data\.\*\.dome\_notifications\.\*\.category | string | 
-action\_result\.data\.\*\.dome\_notifications\.\*\.alert\_ids | string | 
-action\_result\.data\.\*\.dome\_notifications\.\*\.id | numeric | 
-action\_result\.data\.\*\.dome\_notifications\.\*\.dome\_tags | string | 
-action\_result\.data\.\*\.dome\_notifications\.\*\.created | string | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.ip\.malicious\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.ip\.benign\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.ip\.resource\_owner | boolean | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.ip\.activity\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.ip\.comments\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.ip\.whitelisted\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.ip\.suspicious\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.ip\.first\_seen | string | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.ip\.last\_seen | string | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.domain\.malicious\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.domain\.benign\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.domain\.resource\_owner | boolean | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.domain\.activity\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.domain\.comments\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.domain\.whitelisted\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.domain\.suspicious\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.domain\.first\_seen | string | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.domain\.last\_seen | string | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.behavior\.malicious\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.behavior\.benign\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.behavior\.resource\_owner | boolean | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.behavior\.activity\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.behavior\.comments\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.behavior\.whitelisted\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.behavior\.suspicious\_count | numeric | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.behavior\.first\_seen | string | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.behavior\.last\_seen | string | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.domain | string |  `domain` 
-action\_result\.data\.\*\.correlation\_participation\.\*\.ip | string | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.behavior | string | 
-action\_result\.data\.\*\.correlation\_participation\.\*\.dome\_tag | string |   
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failed |
+action_result.parameter.alert_id | string | `irondefense alert id` | 0c740a2c-a566-4c95-a8be-5f48082de2b2 |
+action_result.data | string | | |
+action_result.summary | string | | |
+action_result.message | string | | |
+summary.total_objects | numeric | | |
+summary.total_objects_successful | numeric | | |
+action_result.data.\*.cognitive_system_score | numeric | | 0 |
+action_result.data.\*.community_comments.\*.comment | string | | example community comment |
+action_result.data.\*.community_comments.\*.self | boolean | | True False |
+action_result.data.\*.community_comments.\*.created | string | | 2019-09-05T19:33:32.000Z |
+action_result.data.\*.community_comments.\*.dome_tags | string | | example-tag |
+action_result.data.\*.community_comments.\*.enterprise | boolean | | True False |
+action_result.data.\*.correlations.\*.correlations.\*.enterprise_correlations | numeric | | 5 |
+action_result.data.\*.correlations.\*.correlations.\*.ip | string | `ip` | 1.2.3.4 |
+action_result.data.\*.correlations.\*.correlations.\*.domain | string | `domain` | example.com |
+action_result.data.\*.correlations.\*.correlations.\*.community_correlations | numeric | | 5 |
+action_result.data.\*.correlations.\*.dome_tag | string | | example-tag |
+action_result.data.\*.dome_notifications.\*.category | string | | DNC_PARTICIPANT_ADDED |
+action_result.data.\*.dome_notifications.\*.alert_ids | string | | c60c4168-3fe8-4a6d-b0d1-4977673c98fd |
+action_result.data.\*.dome_notifications.\*.id | numeric | | 123456 |
+action_result.data.\*.dome_notifications.\*.dome_tags | string | | example-tag |
+action_result.data.\*.dome_notifications.\*.created | string | | 2019-09-05T19:33:32.000Z |
+action_result.data.\*.correlation_participation.\*.ip.malicious_count | numeric | | 5 |
+action_result.data.\*.correlation_participation.\*.ip.benign_count | numeric | | 5 |
+action_result.data.\*.correlation_participation.\*.ip.resource_owner | boolean | | True False |
+action_result.data.\*.correlation_participation.\*.ip.activity_count | numeric | | 5 |
+action_result.data.\*.correlation_participation.\*.ip.comments_count | numeric | | 5 |
+action_result.data.\*.correlation_participation.\*.ip.whitelisted_count | numeric | | 5 |
+action_result.data.\*.correlation_participation.\*.ip.suspicious_count | numeric | | 0 |
+action_result.data.\*.correlation_participation.\*.ip.first_seen | string | | 2019-09-05T19:33:32.000Z |
+action_result.data.\*.correlation_participation.\*.ip.last_seen | string | | 2019-09-05T19:33:32.000Z |
+action_result.data.\*.correlation_participation.\*.domain.malicious_count | numeric | | 5 |
+action_result.data.\*.correlation_participation.\*.domain.benign_count | numeric | | 5 |
+action_result.data.\*.correlation_participation.\*.domain.resource_owner | boolean | | True False |
+action_result.data.\*.correlation_participation.\*.domain.activity_count | numeric | | 5 |
+action_result.data.\*.correlation_participation.\*.domain.comments_count | numeric | | 5 |
+action_result.data.\*.correlation_participation.\*.domain.whitelisted_count | numeric | | 5 |
+action_result.data.\*.correlation_participation.\*.domain.suspicious_count | numeric | | 0 |
+action_result.data.\*.correlation_participation.\*.domain.first_seen | string | | 2019-09-05T19:33:32.000Z |
+action_result.data.\*.correlation_participation.\*.domain.last_seen | string | | 2019-09-05T19:33:32.000Z |
+action_result.data.\*.correlation_participation.\*.behavior.malicious_count | numeric | | 5 |
+action_result.data.\*.correlation_participation.\*.behavior.benign_count | numeric | | 5 |
+action_result.data.\*.correlation_participation.\*.behavior.resource_owner | boolean | | True False |
+action_result.data.\*.correlation_participation.\*.behavior.activity_count | numeric | | 5 |
+action_result.data.\*.correlation_participation.\*.behavior.comments_count | numeric | | 5 |
+action_result.data.\*.correlation_participation.\*.behavior.whitelisted_count | numeric | | 5 |
+action_result.data.\*.correlation_participation.\*.behavior.suspicious_count | numeric | | 0 |
+action_result.data.\*.correlation_participation.\*.behavior.first_seen | string | | 2019-09-05T19:33:32.000Z |
+action_result.data.\*.correlation_participation.\*.behavior.last_seen | string | | 2019-09-05T19:33:32.000Z |
+action_result.data.\*.correlation_participation.\*.domain | string | `domain` | |
+action_result.data.\*.correlation_participation.\*.ip | string | | |
+action_result.data.\*.correlation_participation.\*.behavior | string | | |
+action_result.data.\*.correlation_participation.\*.dome_tag | string | | example-tag |
 
 ## action: 'get events'
+
 Retrieves IronDefense Events for a given Alert ID
 
-Type: **generic**  
+Type: **generic** \
 Read only: **False**
 
 #### Action Parameters
+
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**alert\_id** |  required  | The ID of the alert associated with the events to retrieve | string | 
+**alert_id** | required | The ID of the alert associated with the events to retrieve | string | |
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.data | string | 
-action\_result\.summary | string | 
-action\_result\.message | string | 
-action\_result\.parameter\.alert\_id | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric | 
-action\_result\.data\.\*\.events\.\*\.id | string | 
-action\_result\.data\.\*\.events\.\*\.alert\_id | string | 
-action\_result\.data\.\*\.events\.\*\.category | string | 
-action\_result\.data\.\*\.events\.\*\.sub\_category | string | 
-action\_result\.data\.\*\.events\.\*\.severity | numeric | 
-action\_result\.data\.\*\.events\.\*\.confidence | numeric | 
-action\_result\.data\.\*\.events\.\*\.raw\_data\_formats | string | 
-action\_result\.data\.\*\.events\.\*\.start\_time | string | 
-action\_result\.data\.\*\.events\.\*\.end\_time | string | 
-action\_result\.data\.\*\.events\.\*\.src\_ip | string |  `ip` 
-action\_result\.data\.\*\.events\.\*\.dst\_ip | string |  `ip` 
-action\_result\.data\.\*\.events\.\*\.dst\_port | string |  `port` 
-action\_result\.data\.\*\.events\.\*\.src\_network\_id | string | 
-action\_result\.data\.\*\.events\.\*\.dst\_network\_id | string | 
-action\_result\.data\.\*\.events\.\*\.primary\_app\_protocol | string |  `protocol` 
-action\_result\.data\.\*\.events\.\*\.secondary\_app\_protocol | string | 
-action\_result\.data\.\*\.events\.\*\.bytes\_in | string | 
-action\_result\.data\.\*\.events\.\*\.bytes\_out | string | 
-action\_result\.data\.\*\.events\.\*\.total\_bytes | string | 
-action\_result\.data\.\*\.events\.\*\.is\_blacklisted | boolean | 
-action\_result\.data\.\*\.events\.\*\.is\_whitelisted | boolean | 
-action\_result\.data\.\*\.events\.\*\.src\_entity\_attribute | string | 
-action\_result\.data\.\*\.events\.\*\.src\_entity\_attribute\_type | string | 
-action\_result\.data\.\*\.events\.\*\.dst\_entity\_attribute | string | 
-action\_result\.data\.\*\.events\.\*\.dst\_entity\_attribute\_type | string | 
-action\_result\.data\.\*\.events\.\*\.iron\_dome\_shared\_time | string | 
-action\_result\.data\.\*\.events\.\*\.url | string |  `url` 
-action\_result\.data\.\*\.events\.\*\.vue\_url | string | 
-action\_result\.data\.\*\.events\.\*\.created | string | 
-action\_result\.data\.\*\.events\.\*\.updated | string | 
-action\_result\.data\.\*\.constraint\.total | string | 
-action\_result\.data\.\*\.constraint\.limit | numeric | 
-action\_result\.data\.\*\.constraint\.offset | numeric |   
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failed |
+action_result.data | string | | |
+action_result.summary | string | | |
+action_result.message | string | | Retrieving events was successful |
+action_result.parameter.alert_id | string | | |
+summary.total_objects | numeric | | 1 |
+summary.total_objects_successful | numeric | | 1 |
+action_result.data.\*.events.\*.id | string | | 0c740a2c-a566-4c95-a8be-5f48082de2b2 |
+action_result.data.\*.events.\*.alert_id | string | | 0c740a2c-a566-4c95-a8be-5f48082de2b2 |
+action_result.data.\*.events.\*.category | string | | C2 ACTION ACCESS RECON OTHER |
+action_result.data.\*.events.\*.sub_category | string | | UNUSUAL_SERVER_CONNECTIONS |
+action_result.data.\*.events.\*.severity | numeric | | 500 |
+action_result.data.\*.events.\*.confidence | numeric | | 0 |
+action_result.data.\*.events.\*.raw_data_formats | string | | RDF_DNS_LOGS |
+action_result.data.\*.events.\*.start_time | string | | 2019-10-24 10:36:43.676105+00 |
+action_result.data.\*.events.\*.end_time | string | | 2020-04-30T20:41:35.000Z |
+action_result.data.\*.events.\*.src_ip | string | `ip` | 1.2.3.4 |
+action_result.data.\*.events.\*.dst_ip | string | `ip` | 1.2.3.4 |
+action_result.data.\*.events.\*.dst_port | string | `port` | 443 |
+action_result.data.\*.events.\*.src_network_id | string | | sample-network |
+action_result.data.\*.events.\*.dst_network_id | string | | sample-network |
+action_result.data.\*.events.\*.primary_app_protocol | string | `protocol` | http |
+action_result.data.\*.events.\*.secondary_app_protocol | string | | |
+action_result.data.\*.events.\*.bytes_in | string | | |
+action_result.data.\*.events.\*.bytes_out | string | | |
+action_result.data.\*.events.\*.total_bytes | string | | |
+action_result.data.\*.events.\*.is_blacklisted | boolean | | True False |
+action_result.data.\*.events.\*.is_whitelisted | boolean | | True False |
+action_result.data.\*.events.\*.src_entity_attribute | string | | |
+action_result.data.\*.events.\*.src_entity_attribute_type | string | | |
+action_result.data.\*.events.\*.dst_entity_attribute | string | | |
+action_result.data.\*.events.\*.dst_entity_attribute_type | string | | |
+action_result.data.\*.events.\*.iron_dome_shared_time | string | | 2019-10-24 10:36:43.676105+00 |
+action_result.data.\*.events.\*.url | string | `url` | https://example.url |
+action_result.data.\*.events.\*.vue_url | string | | https://1.2.3.4/event?uuid=9f61e9e9af904540ac8bd730f5ed48d2 |
+action_result.data.\*.events.\*.created | string | | 2019-10-24 10:36:43.676105+00 |
+action_result.data.\*.events.\*.updated | string | | 2020-05-01T14:43:13.318275Z |
+action_result.data.\*.constraint.total | string | | 1 |
+action_result.data.\*.constraint.limit | numeric | | 50 |
+action_result.data.\*.constraint.offset | numeric | | 0 |
 
 ## action: 'on poll'
+
 Ingests Configured Notifications from IronDefense
 
-Type: **ingest**  
+Type: **ingest** \
 Read only: **True**
 
 #### Action Parameters
+
 No parameters are required for this action
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.data | string | 
-action\_result\.summary | string | 
-action\_result\.message | string |   
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failed |
+action_result.data | string | | |
+action_result.summary | string | | |
+action_result.message | string | | |
 
 ## action: 'get alerts'
+
 Retrieves Alerts within IronDefense
 
-Type: **generic**  
+Type: **generic** \
 Read only: **False**
 
 #### Action Parameters
+
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**alert\_id** |  optional  | The IDs of the IronDefense alerts to filter\. Enter in CSV format | string | 
-**category** |  optional  | The categories of the IronDefense alerts to filter\. Enter in CSV format | string | 
-**sub\_category** |  optional  | The subcategories of the IronDefense alerts to filter\. Enter in CSV format | string | 
-**status** |  optional  | The statuses of the IronDefense alerts to filter\. Enter in CSV format | string | 
-**min\_severity** |  optional  | The minimum severity of IronDefense alerts to filter | numeric | 
-**max\_severity** |  optional  | The maximum severity of IronDefense alerts to filter | numeric | 
+**alert_id** | optional | The IDs of the IronDefense alerts to filter. Enter in CSV format | string | |
+**category** | optional | The categories of the IronDefense alerts to filter. Enter in CSV format | string | |
+**sub_category** | optional | The subcategories of the IronDefense alerts to filter. Enter in CSV format | string | |
+**status** | optional | The statuses of the IronDefense alerts to filter. Enter in CSV format | string | |
+**min_severity** | optional | The minimum severity of IronDefense alerts to filter | numeric | |
+**max_severity** | optional | The maximum severity of IronDefense alerts to filter | numeric | |
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.alert\_id | string | 
-action\_result\.parameter\.category | string | 
-action\_result\.parameter\.sub\_category | string | 
-action\_result\.parameter\.status | string | 
-action\_result\.parameter\.min\_severity | numeric | 
-action\_result\.parameter\.max\_severity | numeric | 
-action\_result\.data | string | 
-action\_result\.summary | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric | 
-action\_result\.data\.\*\.alerts\.\*\.id | string | 
-action\_result\.data\.\*\.alerts\.\*\.category | string | 
-action\_result\.data\.\*\.constraint\.total | string | 
-action\_result\.data\.\*\.alerts\.\*\.severity | numeric | 
-action\_result\.data\.\*\.alerts\.\*\.status | string | 
-action\_result\.data\.\*\.alerts\.\*\.analyst\_severity | string | 
-action\_result\.data\.\*\.alerts\.\*\.analyst\_expectation | string | 
-action\_result\.data\.\*\.alerts\.\*\.raw\_data\_formats | string | 
-action\_result\.data\.\*\.alerts\.\*\.aggregation\_criteria | string | 
-action\_result\.data\.\*\.alerts\.\*\.event\_count | numeric | 
-action\_result\.data\.\*\.alerts\.\*\.first\_event\_created | string | 
-action\_result\.data\.\*\.alerts\.\*\.last\_event\_created | string | 
-action\_result\.data\.\*\.alerts\.\*\.vue\_url | string |  `url` 
-action\_result\.data\.\*\.alerts\.\*\.created | string | 
-action\_result\.data\.\*\.alerts\.\*\.updated | string | 
-action\_result\.data\.\*\.alerts\.\*\.sub\_category | string | 
-action\_result\.data\.\*\.constraint\.limit | numeric | 
-action\_result\.data\.\*\.constraint\.offset | numeric |   
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failed |
+action_result.parameter.alert_id | string | | |
+action_result.parameter.category | string | | |
+action_result.parameter.sub_category | string | | |
+action_result.parameter.status | string | | |
+action_result.parameter.min_severity | numeric | | |
+action_result.parameter.max_severity | numeric | | |
+action_result.data | string | | |
+action_result.summary | string | | |
+action_result.message | string | | |
+summary.total_objects | numeric | | |
+summary.total_objects_successful | numeric | | |
+action_result.data.\*.alerts.\*.id | string | | c60c4168-3fe8-4a6d-b0d1-4977673c98fd |
+action_result.data.\*.alerts.\*.category | string | | C2 ACTION ACCESS RECON OTHER |
+action_result.data.\*.constraint.total | string | | 1014890 |
+action_result.data.\*.alerts.\*.severity | numeric | | 500 |
+action_result.data.\*.alerts.\*.status | string | | STATUS_AWAITING_REVIEW STATUS_UNDER_REVIEW STATUS_CLOSED |
+action_result.data.\*.alerts.\*.analyst_severity | string | | SEVERITY_UNDECIDED SEVERITY_BENIGN SEVERITY_SUSPICIOUS SEVERITY_MALICIOUS |
+action_result.data.\*.alerts.\*.analyst_expectation | string | | EXP_EXPECTED EXP_UNEXPECTED EXP_UNKNOWN |
+action_result.data.\*.alerts.\*.raw_data_formats | string | | RDF_TAP |
+action_result.data.\*.alerts.\*.aggregation_criteria | string | | scanner.scanner_ip: ["1.2.3.4"] |
+action_result.data.\*.alerts.\*.event_count | numeric | | 1 |
+action_result.data.\*.alerts.\*.first_event_created | string | | 2019-09-05T19:33:32.000Z |
+action_result.data.\*.alerts.\*.last_event_created | string | | 2019-09-05T19:33:32.000Z |
+action_result.data.\*.alerts.\*.vue_url | string | `url` | https://1.2.3.4/alerts?alerts.sort=severity%3ADESC&filter=alertId%3D%3D<alert-id> |
+action_result.data.\*.alerts.\*.created | string | | 2019-09-05T19:33:32.000Z |
+action_result.data.\*.alerts.\*.updated | string | | 2019-09-05T19:33:32.000Z |
+action_result.data.\*.alerts.\*.sub_category | string | | EXTERNAL_PORT_SCANNING |
+action_result.data.\*.constraint.limit | numeric | | 50 |
+action_result.data.\*.constraint.offset | numeric | | 0 |
 
 ## action: 'get event'
+
 Retrieves IronDefense Event for a given Event ID
 
-Type: **generic**  
+Type: **generic** \
 Read only: **False**
 
 #### Action Parameters
+
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**event\_id** |  required  | The ID of the event to retrieve | string | 
+**event_id** | required | The ID of the event to retrieve | string | |
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.data | string | 
-action\_result\.summary | string | 
-action\_result\.message | string | 
-action\_result\.parameter\.event\_id | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric | 
-action\_result\.data\.\*\.event\.id | string | 
-action\_result\.data\.\*\.event\.alert\_id | string | 
-action\_result\.data\.\*\.event\.category | string | 
-action\_result\.data\.\*\.event\.sub\_category | string | 
-action\_result\.data\.\*\.event\.severity | numeric | 
-action\_result\.data\.\*\.event\.confidence | numeric | 
-action\_result\.data\.\*\.event\.raw\_data\_formats | string | 
-action\_result\.data\.\*\.event\.start\_time | string | 
-action\_result\.data\.\*\.event\.end\_time | string | 
-action\_result\.data\.\*\.event\.src\_ip | string |  `ip` 
-action\_result\.data\.\*\.event\.dst\_ip | string |  `ip` 
-action\_result\.data\.\*\.event\.dst\_port | string |  `port` 
-action\_result\.data\.\*\.event\.src\_network\_id | string | 
-action\_result\.data\.\*\.event\.dst\_network\_id | string | 
-action\_result\.data\.\*\.event\.primary\_app\_protocol | string |  `protocol` 
-action\_result\.data\.\*\.event\.secondary\_app\_protocol | string | 
-action\_result\.data\.\*\.event\.bytes\_in | string | 
-action\_result\.data\.\*\.event\.bytes\_out | string | 
-action\_result\.data\.\*\.event\.total\_bytes | string | 
-action\_result\.data\.\*\.event\.app\_domains | string | 
-action\_result\.data\.\*\.event\.is\_blacklisted | boolean | 
-action\_result\.data\.\*\.event\.is\_whitelisted | boolean | 
-action\_result\.data\.\*\.event\.src\_entity\_attribute | string | 
-action\_result\.data\.\*\.event\.src\_entity\_attribute\_type | string | 
-action\_result\.data\.\*\.event\.dst\_entity\_attribute | string | 
-action\_result\.data\.\*\.event\.dst\_entity\_attribute\_type | string | 
-action\_result\.data\.\*\.event\.iron\_dome\_shared\_time | string | 
-action\_result\.data\.\*\.event\.url | string |  `url` 
-action\_result\.data\.\*\.event\.vue\_url | string |  `url` 
-action\_result\.data\.\*\.event\.created | string | 
-action\_result\.data\.\*\.event\.updated | string | 
-action\_result\.data\.\*\.context\.\*\.name | string | 
-action\_result\.data\.\*\.context\.\*\.columns\.\*\.values\.\*\.data\.\*\.long\_value | string | 
-action\_result\.data\.\*\.context\.\*\.columns\.\*\.name | string |  `url` 
-action\_result\.data\.\*\.context\.\*\.columns\.\*\.values\.\*\.data\.\*\.trans\_protocol\_value | string | 
-action\_result\.data\.\*\.context\.\*\.columns\.\*\.values\.\*\.data\.\*\.bool\_value | boolean | 
-action\_result\.data\.\*\.context\.\*\.columns\.\*\.values\.\*\.data\.\*\.string\_value | string | 
-action\_result\.data\.\*\.context\.\*\.columns\.\*\.values\.\*\.data\.\*\.ip\_value | string |  `ip` 
-action\_result\.data\.\*\.context\.\*\.columns\.\*\.values\.\*\.data\.\*\.app\_protocol\_value | string | 
-action\_result\.data\.\*\.context\.\*\.columns\.\*\.values\.\*\.data\.\*\.uuid\_value | string |  `md5` 
-action\_result\.data\.\*\.context\.\*\.columns\.\*\.values\.\*\.data\.\*\.double\_value | numeric | 
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failed |
+action_result.data | string | | |
+action_result.summary | string | | |
+action_result.message | string | | |
+action_result.parameter.event_id | string | | |
+summary.total_objects | numeric | | 1 |
+summary.total_objects_successful | numeric | | 1 |
+action_result.data.\*.event.id | string | | 0c740a2c-a566-4c95-a8be-5f48082de2b2 |
+action_result.data.\*.event.alert_id | string | | 0c740a2c-a566-4c95-a8be-5f48082de2b2 |
+action_result.data.\*.event.category | string | | OTHER |
+action_result.data.\*.event.sub_category | string | | THREAT_INTELLIGENCE_RULE_MATCH |
+action_result.data.\*.event.severity | numeric | | 1000 |
+action_result.data.\*.event.confidence | numeric | | 1 |
+action_result.data.\*.event.raw_data_formats | string | | RDF_DNS_LOGS |
+action_result.data.\*.event.start_time | string | | 2019-10-24 10:36:43.676105+00 |
+action_result.data.\*.event.end_time | string | | 2019-10-24 10:36:43.676105+00 |
+action_result.data.\*.event.src_ip | string | `ip` | 1.2.3.4 |
+action_result.data.\*.event.dst_ip | string | `ip` | 1.2.3.4 |
+action_result.data.\*.event.dst_port | string | `port` | 443 |
+action_result.data.\*.event.src_network_id | string | | sample-network |
+action_result.data.\*.event.dst_network_id | string | | sample-network |
+action_result.data.\*.event.primary_app_protocol | string | `protocol` | http |
+action_result.data.\*.event.secondary_app_protocol | string | | |
+action_result.data.\*.event.bytes_in | string | | 807 |
+action_result.data.\*.event.bytes_out | string | | 141 |
+action_result.data.\*.event.total_bytes | string | | 948 |
+action_result.data.\*.event.app_domains | string | | example.domain |
+action_result.data.\*.event.is_blacklisted | boolean | | True False |
+action_result.data.\*.event.is_whitelisted | boolean | | True False |
+action_result.data.\*.event.src_entity_attribute | string | | |
+action_result.data.\*.event.src_entity_attribute_type | string | | EAT_NONE |
+action_result.data.\*.event.dst_entity_attribute | string | | |
+action_result.data.\*.event.dst_entity_attribute_type | string | | EAT_NONE |
+action_result.data.\*.event.iron_dome_shared_time | string | | 2019-10-24 10:36:43.676105+00 |
+action_result.data.\*.event.url | string | `url` | https://example.url |
+action_result.data.\*.event.vue_url | string | `url` | https://1.2.3.4/event?uuid=0c740a2ca5664c95a8be5f48082de2b2 |
+action_result.data.\*.event.created | string | | 2019-10-24 10:36:43.676105+00 |
+action_result.data.\*.event.updated | string | | 2019-10-24 10:36:43.676105+00 |
+action_result.data.\*.context.\*.name | string | | flows |
+action_result.data.\*.context.\*.columns.\*.values.\*.data.\*.long_value | string | | 0 |
+action_result.data.\*.context.\*.columns.\*.name | string | `url` | majestic_tdurs_rank |
+action_result.data.\*.context.\*.columns.\*.values.\*.data.\*.trans_protocol_value | string | | TCP |
+action_result.data.\*.context.\*.columns.\*.values.\*.data.\*.bool_value | boolean | | True False |
+action_result.data.\*.context.\*.columns.\*.values.\*.data.\*.string_value | string | | |
+action_result.data.\*.context.\*.columns.\*.values.\*.data.\*.ip_value | string | `ip` | 1.2.3.4 |
+action_result.data.\*.context.\*.columns.\*.values.\*.data.\*.app_protocol_value | string | | HTTP |
+action_result.data.\*.context.\*.columns.\*.values.\*.data.\*.uuid_value | string | `md5` | 0c740a2ca5664c95a8be5f48082de2b2 |
+action_result.data.\*.context.\*.columns.\*.values.\*.data.\*.double_value | numeric | | 0 |
+
+______________________________________________________________________
+
+Auto-generated Splunk SOAR Connector documentation.
+
+Copyright 2025 Splunk Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License.
